@@ -1,0 +1,109 @@
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <math.h>
+using namespace std;
+const int N = 10;
+void makeMas(double masNum[N]) {
+	for (int i = 0; i < N; i++) {
+		cin >> masNum[i];
+		}
+	
+
+}
+double serArith(double masNum[N],double arAverage) {
+	for (int j = 0; j < N; j++) {
+		arAverage += masNum[j];
+
+	}
+	arAverage = arAverage / N;
+	return arAverage;
+
+}
+void newMass(double newMas[N], double masNum[N],double res) {
+	for (int i = 0; i < N; i++) {
+		newMas[i] = masNum[i] - res;
+
+	}
+
+}
+double sumEl(double newMas[N],double sum) {
+	for (int l = 0; l < N; l++) {
+		sum += pow(newMas[l], 2);
+	}
+	return sum;
+
+}
+void main() {
+	//1.Реєстрація
+	int quest;
+	double *masNum = new double[N];
+	double *newMas = new double[N];
+	string salt = "dwqhd3427357+-w4503//2487288274";
+	double arAverage = 0;
+	double sum = 0;
+	double sigma = 0;
+	string pass,pass1;
+	string password;
+	string yourValue;
+	ofstream out;
+	ofstream standart;
+	cout << "Use our program like registered person or like quest? If yes - type 1,if not - type 0 " << endl;
+	cin >> quest;
+	if (quest == 1) {
+		out.open("Reg.txt", std::ofstream::out | std::ofstream::app);
+		cout << "Registration:\n" << "Type your password:";
+		cin >> pass;
+		pass1 = pass + salt;
+		cout << "Grats.You are registered!" << endl;
+		out << pass1 << endl;
+
+		out.close();
+		//2.Авторизація
+		ifstream in("Reg.txt");
+		cout << "Type your password:";
+		cin >> yourValue;
+		cout << "\n";
+		while (getline(in, password)) {	
+			if (yourValue == password || yourValue+salt==password) {
+				int times;
+				cout << "Type how many times you want to use our program:" << endl;
+				cin >> times;
+				for (int i = 0; i < times; i++) {
+					cout << "Type numbers : " << endl;
+					makeMas(masNum);
+					serArith(masNum, arAverage);
+					double res = serArith(masNum, arAverage);
+					newMass(newMas, masNum, res);
+					sum = sumEl(newMas, sum);
+					sigma += sqrt(sum / N);
+					standart.open("sigma.txt", std::ofstream::out | std::ofstream::app);
+					standart << sigma << endl;
+					standart.close();
+					cout << "Success.Your sigma is in fail" << endl;
+				   }
+				}
+		}
+		in.close();
+		
+	}
+	else if(quest==0){
+		cout << "You are not registered,but you can use our program one time" << endl;
+		cout << "Type numbers : " << endl;
+
+		makeMas(masNum);
+		serArith(masNum, arAverage);
+		double res = serArith(masNum, arAverage);
+		newMass(newMas, masNum, res);
+		sum = sumEl(newMas, sum);
+		sigma += sqrt(sum / N);
+		standart.open("sigma.txt", std::ofstream::out | std::ofstream::app);
+		standart << sigma << endl;
+		standart.close();
+		cout << "Success.Your sigma is in fail" << endl;
+	}
+	else {
+		exit(1);
+	}
+	system("pause");
+}
