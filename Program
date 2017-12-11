@@ -5,9 +5,19 @@
 using namespace std;
 const int N = 10;
 void makeMas(double masNum[N]) {
-	for (int i = 0; i < N; i++) {
-		cin >> masNum[i];
-		}
+	int i = 0,l=0;
+	
+	ifstream dani("dani.txt");
+	if (!dani) {
+		cout << "Error\n";
+		exit(1);
+	}
+	while (!dani.eof()) {
+		
+		dani >> masNum[i];
+		i++;
+	}
+	
 	
 
 }
@@ -39,7 +49,6 @@ void main() {
 	int quest;
 	double *masNum = new double[N];
 	double *newMas = new double[N];
-	string salt = "dwqhd3427357+-w4503//2487288274";
 	double arAverage = 0;
 	double sum = 0;
 	double sigma = 0;
@@ -48,62 +57,59 @@ void main() {
 	string yourValue;
 	ofstream out;
 	ofstream standart;
-	cout << "Use our program like registered person or like quest? If yes - type 1,if not - type 0 " << endl;
+	cout << "Use our program like registered person or like quest? If yes - type 1,if not - type 0,if dont wont to use-another number" << endl;
 	cin >> quest;
 	if (quest == 1) {
-		out.open("Reg.txt", std::ofstream::out | std::ofstream::app);
-		cout << "Registration:\n" << "Type your password:";
-		cin >> pass;
-		pass1 = pass + salt;
-		cout << "Grats.You are registered!" << endl;
-		out << pass1 << endl;
-
-		out.close();
+			out.open("Reg.txt", ofstream::out | ofstream::app);
+			cout << "Registration:\n" << "Type your password:";
+			cin >> pass;
+			cout << "Grats.You are registered!" << endl;
+			out << pass << endl;
+			out.close();
+			
 		//2.Авторизація
-		ifstream in("Reg.txt");
-		cout << "Type your password:";
-		cin >> yourValue;
-		cout << "\n";
-		while (getline(in, password)) {	
-			if (yourValue == password || yourValue+salt==password) {
-				int times;
-				cout << "Type how many times you want to use our program:" << endl;
-				cin >> times;
-				for (int i = 0; i < times; i++) {
-					cout << "Type numbers : " << endl;
-					makeMas(masNum);
-					serArith(masNum, arAverage);
-					double res = serArith(masNum, arAverage);
-					newMass(newMas, masNum, res);
-					sum = sumEl(newMas, sum);
-					sigma += sqrt(sum / N);
-					standart.open("sigma.txt", std::ofstream::out | std::ofstream::app);
-					standart << sigma << endl;
-					standart.close();
-					cout << "Success.Your sigma is in fail" << endl;
-				   }
+			ifstream in("Reg.txt");
+			cout << "Authorization\n-----------------" << endl;
+			cout << "Password:";
+			cin >> yourValue;
+			cout << "\n";
+			while (getline(in, password)) {
+				if (yourValue == password) {
+					int times;
+					cout << "Type how many times you want to use our program:" << endl;
+					cin >> times;
+					for (int i = 0; i < times; i++) {
+						makeMas(masNum);
+						serArith(masNum, arAverage);
+						double res = serArith(masNum, arAverage);
+						newMass(newMas, masNum, res);
+						sum = sumEl(newMas, sum);
+						sigma = sqrt(sum / N);
+						standart.open("sigma.txt", std::ofstream::out | std::ofstream::app);
+						standart << sigma << "\n-----" << endl;
+						standart.close();
+						cout << "Success.Your sigma is in fail" << endl;
+					}
 				}
-		}
-		in.close();
+			}
+			in.close();
 		
 	}
 	else if(quest==0){
 		cout << "You are not registered,but you can use our program one time" << endl;
-		cout << "Type numbers : " << endl;
-
 		makeMas(masNum);
 		serArith(masNum, arAverage);
 		double res = serArith(masNum, arAverage);
 		newMass(newMas, masNum, res);
 		sum = sumEl(newMas, sum);
-		sigma += sqrt(sum / N);
+		sigma = sqrt(sum / N);
 		standart.open("sigma.txt", std::ofstream::out | std::ofstream::app);
-		standart << sigma << endl;
+		standart << sigma<<"\n-----"<< endl;
 		standart.close();
 		cout << "Success.Your sigma is in fail" << endl;
 	}
 	else {
-		exit(1);
+		exit(0);
 	}
 	system("pause");
 }
